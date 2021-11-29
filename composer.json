@@ -1,5 +1,5 @@
 {
-    "name": "mfauveau/omnipay-nmi",
+    "name": "digistorm/omnipay-nmi",
     "type": "library",
     "description": "NMI (Network Merchants Inc.) driver for the Omnipay PHP payment processing library",
     "keywords": [
@@ -14,14 +14,8 @@
         "network",
         "inc"
     ],
-    "homepage": "https://github.com/mfauveau/omnipay-nmi",
+    "homepage": "https://github.com/digistorm/omnipay-nmi",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Matthieu Fauveau",
-            "email": "mfauveau@gmail.com"
-        }
-    ],
     "autoload": {
         "psr-4": { "Omnipay\\NMI\\" : "src/" }
     },
