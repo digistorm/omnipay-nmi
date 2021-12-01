@@ -283,7 +283,7 @@ class DirectPostGateway extends AbstractGateway
      */
     public function getEndpoint()
     {
-        return $this->endpoint;
+        return $this->getParameter('endpoint');
     }
 
     /**
