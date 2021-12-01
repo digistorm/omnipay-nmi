@@ -24,10 +24,7 @@ class DirectPostGateway extends AbstractGateway
      */
     public function getDefaultParameters()
     {
-        return array(
-            'username' => '',
-            'password' => ''
-        );
+        return array();
     }
 
     /**
@@ -62,6 +59,23 @@ class DirectPostGateway extends AbstractGateway
     public function setPassword($value)
     {
         return $this->setParameter('password', $value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSecurityKey()
+    {
+        return $this->getParameter('security_key');
+    }
+
+    /**
+     * @param  string $value
+     * @return $this
+     */
+    public function setSecurityKey($value)
+    {
+        return $this->setParameter('security_key', $value);
     }
 
     /**

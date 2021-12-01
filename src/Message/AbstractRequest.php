@@ -28,6 +28,16 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->setParameter('password', $value);
     }
 
+    public function getSecurityKey()
+    {
+        return $this->getParameter('security_key');
+    }
+
+    public function setSecurityKey($value)
+    {
+        return $this->setParameter('security_key', $value);
+    }
+
     public function getProcessorId()
     {
         return $this->getParameter('processor_id');
@@ -209,9 +219,13 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         if (isset($this->customer_vault)) {
             $data['customer_vault'] = $this->customer_vault;
         }
-
-        $data['username'] = $this->getUsername();
-        $data['password'] = $this->getPassword();
+        
+        if (isset($this->getSecurityKey())) {
+            $data['security_key'] = $this->getSecurityKey();
+        } else {
+            $data['username'] = $this->getUsername();
+            $data['password'] = $this->getPassword();
+        }
 
         if ($this->getProcessorId()) {
             $data['processor_id'] = $this->getProcessorId();
