@@ -220,7 +220,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
             $data['customer_vault'] = $this->customer_vault;
         }
         
-        if (isset($this->getSecurityKey())) {
+        if ($this->getSecurityKey() !== null) {
             $data['security_key'] = $this->getSecurityKey();
         } else {
             $data['username'] = $this->getUsername();
