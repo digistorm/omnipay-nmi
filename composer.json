@@ -23,11 +23,17 @@
         "omnipay/common": "^3"
     },
     "require-dev": {
-        "omnipay/tests": "^3"
+        "omnipay/tests": "^3",
+        "http-interop/http-factory-guzzle": "^1.1"
     },
     "extra": {
         "branch-alias": {
             "dev-master": "3.0.x-dev"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
         }
     }
 }
