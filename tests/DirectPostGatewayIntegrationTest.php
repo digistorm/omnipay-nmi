@@ -22,9 +22,11 @@ class DirectPostGatewayIntegrationTest extends GatewayTestCase
     /**
      * Instantiate the gateway and the populate the purchaseOptions array
      */
-    public function setUp()
+    public function setUp(): void
     {
-        $this->gateway = new DirectPostGateway();
+        $client = $this->getHttpClient();
+        $request = $this->getHttpRequest();
+        $this->gateway = new DirectPostGateway($client, $request);
         $this->gateway->setUsername('demo');
         $this->gateway->setPassword('password');
 
