@@ -1,15 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\NMI\Message;
 
+use Omnipay\Common\Exception\InvalidRequestException;
+
 /**
-* NMI Direct Post Delete Card Request
-*/
+ * NMI Direct Post Delete Card Request
+ */
 class DirectPostDeleteCardRequest extends AbstractRequest
 {
-    protected $customer_vault = 'delete_customer';
+    public string $customer_vault = 'delete_customer';
 
-    public function getData()
+    /**
+     * @throws InvalidRequestException
+     */
+    public function getData(): array
     {
         $this->validate('cardReference');
 

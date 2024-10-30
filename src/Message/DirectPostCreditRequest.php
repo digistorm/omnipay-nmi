@@ -1,10 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Omnipay\NMI\Message;
 
 /**
-* NMI Direct Post Credit Request
-*/
+ * NMI Direct Post Credit Request
+ */
 class DirectPostCreditRequest extends DirectPostAuthRequest
 {
-    protected $type = 'credit';
+    public string $type = 'credit';
 }

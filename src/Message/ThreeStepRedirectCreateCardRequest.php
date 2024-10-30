@@ -1,35 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\NMI\Message;
+
+use Omnipay\Common\Exception\InvalidRequestException;
 
 /**
  * NMI Three Step Redirect Create Card Request
  */
 class ThreeStepRedirectCreateCardRequest extends ThreeStepRedirectAbstractRequest
 {
-    /**
-     * @var string
-     */
-    protected $type = 'add-customer';
+    public string $type = 'add-customer';
 
     /**
-     * @return array
+     * @throws InvalidRequestException
      */
-    public function getData()
+    public function getData(): array
     {
         $this->validate('card');
 
-        $data = array(
-            'api-key'      => $this->getApiKey(),
-            'redirect-url' => $this->getRedirectUrl(),
-        );
+        $data = ['api-key' => $this->getApiKey(), 'redirect-url' => $this->getRedirectUrl()];
 
-        $data = array_merge(
+        return array_merge(
             $data,
             $this->getBillingData(),
             $this->getShippingData()
         );
-
-        return $data;
     }
 }

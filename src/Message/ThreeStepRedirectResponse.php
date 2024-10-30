@@ -1,114 +1,81 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\NMI\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RequestInterface;
-use Omnipay\Common\Exception\InvalidResponseException;
+use SimpleXMLElement;
 
 /**
  * NMI Three Step Redirect Response
  */
 class ThreeStepRedirectResponse extends AbstractResponse
 {
-    /**
-     * @param \Omnipay\Common\Message\RequestInterface
-     * @param \SimpleXMLElement
-     */
-    public function __construct(RequestInterface $request, $data)
+    public function __construct(RequestInterface $request, SimpleXMLElement $data)
     {
-        $this->request = $request;
-        $this->data = $data;
+        parent::__construct($request, $data);
     }
 
-    /**
-     * @return boolean
-     */
-    public function isSuccessful()
+    public function isSuccessful(): bool
     {
-        return '1' === $this->getCode();
+        return $this->getCode() === '1';
     }
 
-    /**
-     * @return string
-     */
-    public function getCode()
+    public function getCode(): ?string
     {
-        return trim($this->data->{'result'});
+        return trim((string) $this->data->{'result'});
     }
 
-    /**
-     * @return string
-     */
-    public function getResponseCode()
+    public function getResponseCode(): ?string
     {
-        return trim($this->data->{'result-code'});
+        return trim((string) $this->data->{'result-code'});
     }
 
-    /**
-     * @return string
-     */
-    public function getMessage()
+    public function getMessage(): ?string
     {
-        return trim($this->data->{'result-text'});
+        return trim((string) $this->data->{'result-text'});
     }
 
-    public function getAuthorizationCode()
+    public function getAuthorizationCode(): ?string
     {
-        return trim($this->data->{'authorization-code'});
+        return trim((string) $this->data->{'authorization-code'});
     }
 
-    /**
-     * @return string
-     */
-    public function getAVSResponse()
+    public function getAVSResponse(): ?string
     {
-        return trim($this->data->{'avs-result'});
+        return trim((string) $this->data->{'avs-result'});
     }
 
-    /**
-     * @return string
-     */
-    public function getCVVResponse()
+    public function getCVVResponse(): ?string
     {
-        return trim($this->data->{'cvv-result'});
+        return trim((string) $this->data->{'cvv-result'});
     }
 
-    /**
-     * @return string
-     */
-    public function getOrderId()
+    public function getOrderId(): ?string
     {
-        return trim($this->data->{'order-id'});
+        return trim((string) $this->data->{'order-id'});
     }
 
-    /**
-     * @return string
-     */
-    public function getTransactionReference()
+    public function getTransactionReference(): ?string
     {
-        return trim($this->data->{'transaction-id'});
+        return trim((string) $this->data->{'transaction-id'});
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCardReference()
+    public function getCardReference(): ?string
     {
         if (isset($this->data->{'customer-vault-id'})) {
-            return trim($this->data->{'customer-vault-id'});
+            return trim((string) $this->data->{'customer-vault-id'});
         }
 
         return null;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getFormUrl()
+    public function getFormUrl(): ?string
     {
         if (isset($this->data->{'form-url'})) {
-            return trim($this->data->{'form-url'});
+            return trim((string) $this->data->{'form-url'});
         }
 
         return null;

@@ -1,70 +1,73 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Omnipay\NMI\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RequestInterface;
-use Omnipay\Common\Exception\InvalidResponseException;
 
 /**
-* NMI Direct Post Response
-*/
+ * NMI Direct Post Response
+ */
 class DirectPostResponse extends AbstractResponse
 {
     public function __construct(RequestInterface $request, $data)
     {
+        parent::__construct($request, $data);
         $this->request = $request;
-        parse_str($data, $this->data);
+        parse_str((string) $data, $this->data);
     }
 
-    public function isSuccessful()
+    public function isSuccessful(): bool
     {
-        return '1' === $this->getCode();
+        return $this->getCode() === '1';
     }
 
-    public function getCode()
+    public function getCode(): ?string
     {
-        return trim($this->data['response']);
+        return trim((string) $this->data['response']);
     }
 
-    public function getResponseCode()
+    public function getResponseCode(): ?string
     {
-        return trim($this->data['response_code']);
+        return trim((string) $this->data['response_code']);
     }
 
-    public function getMessage()
+    public function getMessage(): ?string
     {
-        return trim($this->data['responsetext']);
+        return trim((string) $this->data['responsetext']);
     }
 
-    public function getAuthorizationCode()
+    public function getAuthorizationCode(): ?string
     {
-        return trim($this->data['authcode']);
+        return trim((string) $this->data['authcode']);
     }
 
-    public function getAVSResponse()
+    public function getAVSResponse(): ?string
     {
-        return trim($this->data['avsresponse']);
+        return trim((string) $this->data['avsresponse']);
     }
 
-    public function getCVVResponse()
+    public function getCVVResponse(): ?string
     {
-        return trim($this->data['cvvresponse']);
+        return trim((string) $this->data['cvvresponse']);
     }
 
-    public function getOrderId()
+    public function getOrderId(): ?string
     {
-        return trim($this->data['orderid']);
+        return trim((string) $this->data['orderid']);
     }
 
-    public function getTransactionReference()
+    public function getTransactionReference(): ?string
     {
-        return trim($this->data['transactionid']);
+        return trim((string) $this->data['transactionid']);
     }
 
-    public function getCardReference()
+    public function getCardReference(): ?string
     {
         if (isset($this->data['customer_vault_id'])) {
-            return trim($this->data['customer_vault_id']);
+            return trim((string) $this->data['customer_vault_id']);
         }
 
         return null;

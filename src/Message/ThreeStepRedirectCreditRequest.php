@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\NMI\Message;
 
 /**
@@ -7,8 +9,5 @@ namespace Omnipay\NMI\Message;
  */
 class ThreeStepRedirectCreditRequest extends ThreeStepRedirectAuthRequest
 {
-    /**
-     * @var string
-     */
-    protected $type = 'credit';
+    public string $type = 'credit';
 }

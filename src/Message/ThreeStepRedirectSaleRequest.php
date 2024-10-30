@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\NMI\Message;
 
 /**
@@ -7,8 +9,5 @@ namespace Omnipay\NMI\Message;
  */
 class ThreeStepRedirectSaleRequest extends ThreeStepRedirectAuthRequest
 {
-    /**
-     * @var string
-     */
-    protected $type = 'sale';
+    public string $type = 'sale';
 }

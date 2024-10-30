@@ -1,29 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\NMI\Message;
+
+use Omnipay\Common\Exception\InvalidRequestException;
 
 /**
  * NMI Three Step Redirect Complete Request
  */
 class ThreeStepRedirectCompleteActionRequest extends ThreeStepRedirectAbstractRequest
 {
-    /**
-     * @var string
-     */
-    protected $type = 'complete-action';
+    public string $type = 'complete-action';
 
     /**
-     * @return array
+     * @throws InvalidRequestException
      */
-    public function getData()
+    public function getData(): array
     {
         $this->validate('token_id');
 
-        $data = array(
-            'api-key'  => $this->getApiKey(),
-            'token-id' => $this->getTokenId(),
-        );
-
-        return $data;
+        return [
+            'api-key' => $this->getApiKey(),
+            'token-id' => $this->getTokenId()
+        ];
     }
 }

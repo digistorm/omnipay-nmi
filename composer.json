@@ -21,12 +21,20 @@
     },
     "require": {
         "php": "^8.1",
+        "ext-bcmath":  "*",
+        "ext-simplexml": "*",
+        "ext-libxml": "*",
         "omnipay/common": "^3",
-        "symfony/http-client": "^7.1"
+        "symfony/http-client": "^7.1",
+        "guzzlehttp/guzzle": "^7.8",
+        "php-http/guzzle7-adapter": "^1.0"
     },
     "require-dev": {
         "omnipay/tests": "^4",
-        "http-interop/http-factory-guzzle": "^1.2"
+        "http-interop/http-factory-guzzle": "^1.2",
+        "rector/rector": "^1.2",
+        "friendsofphp/php-cs-fixer": "^3.64",
+        "spaze/phpstan-disallowed-calls": "^3.5"
     },
     "config": {
         "platform": {
