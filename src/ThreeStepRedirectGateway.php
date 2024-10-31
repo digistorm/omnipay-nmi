@@ -1,5 +1,20 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Omnipay\NMI;
+
+use Omnipay\Common\Message\AbstractRequest;
+use Omnipay\NMI\Message\ThreeStepRedirectAuthRequest;
+use Omnipay\NMI\Message\ThreeStepRedirectCaptureRequest;
+use Omnipay\NMI\Message\ThreeStepRedirectCompleteActionRequest;
+use Omnipay\NMI\Message\ThreeStepRedirectCreateCardRequest;
+use Omnipay\NMI\Message\ThreeStepRedirectCreditRequest;
+use Omnipay\NMI\Message\ThreeStepRedirectDeleteCardRequest;
+use Omnipay\NMI\Message\ThreeStepRedirectRefundRequest;
+use Omnipay\NMI\Message\ThreeStepRedirectSaleRequest;
+use Omnipay\NMI\Message\ThreeStepRedirectUpdateCardRequest;
+use Omnipay\NMI\Message\ThreeStepRedirectVoidRequest;
 
 /**
  * NMI Three Step Redirect Gateway
@@ -9,68 +24,42 @@ namespace Omnipay\NMI;
  */
 class ThreeStepRedirectGateway extends DirectPostGateway
 {
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'NMI Three Step Redirect';
     }
 
-    /**
-     * @return array
-     */
-    public function getDefaultParameters()
+    public function getDefaultParameters(): array
     {
-        return array(
-            'api_key'      => '',
-            'redirect_url' => '',
-            'endpoint'     => '',
-        );
+        return ['api_key' => '', 'redirect_url' => '', 'endpoint' => ''];
     }
 
-    /**
-     * @return string
-     */
-    public function getApiKey()
+    public function getApiKey(): string
     {
         return $this->getParameter('api_key');
     }
 
-    /**
-     * @param string
-     * @return \Omnipay\Common\AbstractGateway
-     */
-    public function setApiKey($value)
+    public function setApiKey(string $value): self
     {
         return $this->setParameter('api_key', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getRedirectUrl()
+    public function getRedirectUrl(): string
     {
         return $this->getParameter('redirect_url');
     }
 
-    /**
-     * @param string
-     * @return \Omnipay\Common\AbstractGateway
-     */
-    public function setRedirectUrl($value)
+    public function setRedirectUrl(string $value): self
     {
         return $this->setParameter('redirect_url', $value);
     }
 
     /**
      * Transaction sales are submitted and immediately flagged for settlement.
-     * @param array
-     * @return \Omnipay\NMI\Message\ThreeStepRedirectSaleRequest
      */
-    public function sale(array $parameters = array())
+    public function sale(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\ThreeStepRedirectSaleRequest', $parameters);
+        return $this->createRequest(ThreeStepRedirectSaleRequest::class, $options);
     }
 
     /**
@@ -78,94 +67,68 @@ class ThreeStepRedirectGateway extends DirectPostGateway
      * for settlement. These transactions must be flagged for settlement using
      * the capture transaction type. Authorizations typically remain active for
      * three to seven business days.
-     * @param array
-     * @return \Omnipay\NMI\Message\ThreeStepRedirectAuthRequest
      */
-    public function auth(array $parameters = array())
+    public function auth(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\ThreeStepRedirectAuthRequest', $parameters);
+        return $this->createRequest(ThreeStepRedirectAuthRequest::class, $options);
     }
 
     /**
      * Transaction captures flag existing authorizations for settlement.
      * Only authorizations can be captured. Captures can be submitted for an
      * amount equal to or less than the original authorization.
-     * @param array
-     * @return \Omnipay\NMI\Message\ThreeStepRedirectCaptureRequest
      */
-    public function capture(array $parameters = array())
+    public function capture(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\ThreeStepRedirectCaptureRequest', $parameters);
+        return $this->createRequest(ThreeStepRedirectCaptureRequest::class, $options);
     }
 
     /**
      * Transaction voids will cancel an existing sale or captured authorization.
      * In addition, non-captured authorizations can be voided to prevent any
      * future capture. Voids can only occur if the transaction has not been settled.
-     * @param array
-     * @return \Omnipay\NMI\Message\ThreeStepRedirectVoidRequest
      */
-    public function void(array $parameters = array())
+    public function void(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\ThreeStepRedirectVoidRequest', $parameters);
+        return $this->createRequest(ThreeStepRedirectVoidRequest::class, $options);
     }
 
     /**
      * Transaction refunds will reverse a previously settled transaction. If the
      * transaction has not been settled, it must be voided instead of refunded.
-     * @param array
-     * @return \Omnipay\NMI\Message\ThreeStepRedirectRefundRequest
      */
-    public function refund(array $parameters = array())
+    public function refund(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\ThreeStepRedirectRefundRequest', $parameters);
+        return $this->createRequest(ThreeStepRedirectRefundRequest::class, $options);
     }
 
     /**
      * Transaction credits apply an amount to the cardholder's card that was not
      * originally processed through the Gateway. In most situations credits are
      * disabled as transaction refunds should be used instead.
-     * @param array
-     * @return \Omnipay\NMI\Message\ThreeStepRedirectCreditRequest
      */
-    public function credit(array $parameters = array())
+    public function credit(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\ThreeStepRedirectCreditRequest', $parameters);
+        return $this->createRequest(ThreeStepRedirectCreditRequest::class, $options);
     }
 
-    /**
-     * @param array
-     * @return \Omnipay\NMI\Message\ThreeStepRedirectCreateCardRequest
-     */
-    public function createCard(array $parameters = array())
+    public function createCard(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\ThreeStepRedirectCreateCardRequest', $parameters);
+        return $this->createRequest(ThreeStepRedirectCreateCardRequest::class, $options);
     }
 
-    /**
-     * @param array
-     * @return \Omnipay\NMI\Message\ThreeStepRedirectUpdateCardRequest
-     */
-    public function updateCard(array $parameters = array())
+    public function updateCard(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\ThreeStepRedirectUpdateCardRequest', $parameters);
+        return $this->createRequest(ThreeStepRedirectUpdateCardRequest::class, $options);
     }
 
-    /**
-     * @param array
-     * @return \Omnipay\NMI\Message\ThreeStepRedirectDeleteCardRequest
-     */
-    public function deleteCard(array $parameters = array())
+    public function deleteCard(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\ThreeStepRedirectDeleteCardRequest', $parameters);
+        return $this->createRequest(ThreeStepRedirectDeleteCardRequest::class, $options);
     }
 
-    /**
-     * @param array
-     * @return \Omnipay\NMI\Message\ThreeStepRedirectCompleteActionRequest
-     */
-    public function completeAction(array $parameters = array())
+    public function completeAction(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\ThreeStepRedirectCompleteActionRequest', $parameters);
+        return $this->createRequest(ThreeStepRedirectCompleteActionRequest::class, $options);
     }
 }

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\NMI\Message;
 
 use Omnipay\Tests\TestCase;
 
 class DirectPostResponseTest extends TestCase
 {
-    public function testAuthorizeSuccess()
+    public function testAuthorizeSuccess(): void
     {
         $httpResponse = $this->getMockHttpResponse('DirectPostAuthSuccess.txt');
         $response = new DirectPostResponse($this->getMockRequest(), $httpResponse->getBody());
@@ -21,7 +23,7 @@ class DirectPostResponseTest extends TestCase
         $this->assertSame('', $response->getOrderId());
     }
 
-    public function testAuthorizeFailure()
+    public function testAuthorizeFailure(): void
     {
         $httpResponse = $this->getMockHttpResponse('DirectPostAuthFailure.txt');
         $response = new DirectPostResponse($this->getMockRequest(), $httpResponse->getBody());

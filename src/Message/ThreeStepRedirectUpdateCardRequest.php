@@ -1,21 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\NMI\Message;
+
+use Omnipay\Common\Exception\InvalidRequestException;
 
 /**
  * NMI Three Step Redirect Update Card Request
  */
 class ThreeStepRedirectUpdateCardRequest extends ThreeStepRedirectCreateCardRequest
 {
-    /**
-     * @var string
-     */
-    protected $type = 'update-customer';
+    public string $type = 'update-customer';
 
     /**
-     * @return array
+     * @throws InvalidRequestException
      */
-    public function getData()
+    public function getData(): array
     {
         $data = parent::getData();
 

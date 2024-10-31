@@ -1,15 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\NMI\Message;
 
+use Omnipay\Common\Exception\InvalidCreditCardException;
+use Omnipay\Common\Exception\InvalidRequestException;
+
 /**
-* NMI Direct Post Create Card Request
-*/
+ * NMI Direct Post Create Card Request
+ */
 class DirectPostCreateCardRequest extends AbstractRequest
 {
-    protected $customer_vault = 'add_customer';
+    public string $customer_vault = 'add_customer';
 
-    public function getData()
+    /**
+     * @throws InvalidCreditCardException
+     * @throws InvalidRequestException
+     */
+    public function getData(): array
     {
         $this->validate('card');
         $this->getCard()->validate();
@@ -20,7 +29,7 @@ class DirectPostCreateCardRequest extends AbstractRequest
         $data['ccexp'] = $this->getCard()->getExpiryDate('my');
         $data['payment'] = 'creditcard';
 
-        if ('update_customer' === $this->customer_vault) {
+        if ($this->customer_vault === 'update_customer') {
             $data['customer_vault_id'] = $this->getCardReference();
         }
 

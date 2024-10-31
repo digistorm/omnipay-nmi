@@ -1,8 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\NMI\Message;
 
+use Exception;
+use InvalidArgumentException;
 use Omnipay\Common\CreditCard;
+use Omnipay\Common\Message\AbstractResponse;
+use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 use SimpleXMLElement;
 
@@ -11,69 +17,44 @@ use SimpleXMLElement;
  */
 abstract class ThreeStepRedirectAbstractRequest extends AbstractRequest
 {
-    /**
-     * @var string
-     */
-    protected $endpoint = 'https://secure.nmi.com/api/v2/three-step';
+    public string $type;
 
-    /**
-     * @return string
-     */
-    public function getApiKey()
+    protected string $endpoint = 'https://secure.nmi.com/api/v2/three-step';
+
+    public function getApiKey(): ?string
     {
         return $this->getParameter('api_key');
     }
 
-    /**
-     * @param string
-     * @return \Omnipay\Common\Message\AbstractRequest
-     */
-    public function setApiKey($value)
+    public function setApiKey(string $value): self
     {
         return $this->setParameter('api_key', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getRedirectUrl()
+    public function getRedirectUrl(): ?string
     {
         return $this->getParameter('redirect_url');
     }
 
-    /**
-     * @param string
-     * @return \Omnipay\Common\Message\AbstractRequest
-     */
-    public function setRedirectUrl($value)
+    public function setRedirectUrl(string $value): self
     {
         return $this->setParameter('redirect_url', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getTokenId()
+    public function getTokenId(): ?string
     {
         return $this->getParameter('token_id');
     }
 
-    /**
-     * @param string
-     * @return \Omnipay\Common\Message\AbstractRequest
-     */
-    public function setTokenId($value)
+    public function setTokenId(string $value): self
     {
         return $this->setParameter('token_id', $value);
     }
 
     /**
      * Sets the card.
-     *
-     * @param CreditCard $value
-     * @return AbstractRequest Provides a fluent interface
      */
-    public function setCard($value)
+    public function setCard(mixed $value): self
     {
         if (!$value instanceof CreditCard) {
             $value = new CreditCard($value);
@@ -82,105 +63,71 @@ abstract class ThreeStepRedirectAbstractRequest extends AbstractRequest
         return $this->setParameter('card', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getSecCode()
+    public function getSecCode(): ?string
     {
         return $this->getParameter('sec_code');
     }
 
-    /**
-     * @param string
-     * @return \Omnipay\Common\Message\AbstractRequest
-     */
-    public function setSecCode($value)
+    public function setSecCode(string $value): self
     {
         return $this->setParameter('sec_code', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getMerchantDefinedField_1()
+    public function getMerchantDefinedField_1(): ?string
     {
         return $this->getParameter('merchant_defined_field_1');
     }
 
     /**
      * Sets the first merchant defined field.
-     *
-     * @param string
-     * @return AbstractRequest Provides a fluent interface
      */
-    public function setMerchantDefinedField_1($value)
+    public function setMerchantDefinedField_1(string $value): self
     {
         return $this->setParameter('merchant_defined_field_1', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getMerchantDefinedField_2()
+    public function getMerchantDefinedField_2(): ?string
     {
         return $this->getParameter('merchant_defined_field_2');
     }
 
     /**
      * Sets the second merchant defined field.
-     *
-     * @param string
-     * @return AbstractRequest Provides a fluent interface
      */
-    public function setMerchantDefinedField_2($value)
+    public function setMerchantDefinedField_2(string $value): self
     {
         return $this->setParameter('merchant_defined_field_2', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getMerchantDefinedField_3()
+    public function getMerchantDefinedField_3(): ?string
     {
         return $this->getParameter('merchant_defined_field_3');
     }
 
     /**
      * Sets the third merchant defined field.
-     *
-     * @param string
-     * @return AbstractRequest Provides a fluent interface
      */
-    public function setMerchantDefinedField_3($value)
+    public function setMerchantDefinedField_3(string $value): self
     {
         return $this->setParameter('merchant_defined_field_3', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getMerchantDefinedField_4()
+    public function getMerchantDefinedField_4(): ?string
     {
         return $this->getParameter('merchant_defined_field_4');
     }
 
     /**
      * Sets the fourth merchant defined field.
-     *
-     * @param string
-     * @return AbstractRequest Provides a fluent interface
      */
-    public function setMerchantDefinedField_4($value)
+    public function setMerchantDefinedField_4(string $value): self
     {
         return $this->setParameter('merchant_defined_field_4', $value);
     }
 
-    /**
-     * @return array
-     */
-    protected function getOrderData()
+    protected function getOrderData(): array
     {
-        $data = array();
+        $data = [];
 
         $data['order-id'] = $this->getOrderId();
         $data['order-description'] = $this->getOrderDescription();
@@ -193,82 +140,68 @@ abstract class ThreeStepRedirectAbstractRequest extends AbstractRequest
             $data['currency'] = $this->getCurrency();
         }
 
-        if ($this->getSecCode()) {
+        if ($this->getSecCode() !== '' && $this->getSecCode() !== '0') {
             $data['sec-code'] = $this->getSecCode();
         }
 
         return $data;
     }
 
-    /**
-     * @return array
-     */
-    protected function getBillingData()
+    protected function getBillingData(): array
     {
-        $data = array();
+        $data = [];
 
-        if ($card = $this->getCard()) {
-            $data['billing'] = array(
-                'first-name' => $card->getBillingFirstName(),
-                'last-name'  => $card->getBillingLastName(),
-                'address1'   => $card->getBillingAddress1(),
-                'city'       => $card->getBillingCity(),
-                'state'      => $card->getBillingState(),
-                'postal'     => $card->getBillingPostcode(),
-                'country'    => $card->getBillingCountry(),
-                'phone'      => $card->getBillingPhone(),
-                'email'      => $card->getEmail(),
-                'company'    => $card->getBillingCompany(),
-                'address2'   => $card->getBillingAddress2(),
-                'fax'        => $card->getBillingFax(),
-            );
-        }
+        $card = $this->getCard();
+
+        $data['billing'] = [
+            'first-name' => $card->getBillingFirstName(),
+            'last-name' => $card->getBillingLastName(),
+            'address1' => $card->getBillingAddress1(),
+            'city' => $card->getBillingCity(),
+            'state' => $card->getBillingState(),
+            'postal' => $card->getBillingPostcode(),
+            'country' => $card->getBillingCountry(),
+            'phone' => $card->getBillingPhone(),
+            'email' => $card->getEmail(),
+            'company' => $card->getBillingCompany(),
+            'address2' => $card->getBillingAddress2(),
+            'fax' => $card->getBillingFax()
+        ];
 
         return $data;
     }
 
-    /**
-     * @return array
-     */
-    protected function getShippingData()
+    protected function getShippingData(): array
     {
-        $data = array();
+        $data = [];
 
-        if ($card = $this->getCard()) {
-            $data['shipping'] = array(
-                'first-name' => $card->getShippingFirstName(),
-                'last-name'  => $card->getShippingLastName(),
-                'address1'   => $card->getShippingAddress1(),
-                'city'       => $card->getShippingCity(),
-                'state'      => $card->getShippingState(),
-                'postal'     => $card->getShippingPostcode(),
-                'country'    => $card->getShippingCountry(),
-                'email'      => $card->getEmail(),
-                'company'    => $card->getShippingCompany(),
-                'address2'   => $card->getShippingAddress2(),
-            );
-        }
+        $card = $this->getCard();
+        $data['shipping'] = [
+            'first-name' => $card->getShippingFirstName(),
+            'last-name' => $card->getShippingLastName(),
+            'address1' => $card->getShippingAddress1(),
+            'city' => $card->getShippingCity(),
+            'state' => $card->getShippingState(),
+            'postal' => $card->getShippingPostcode(),
+            'country' => $card->getShippingCountry(),
+            'email' => $card->getEmail(),
+            'company' => $card->getShippingCompany(),
+            'address2' => $card->getShippingAddress2()
+        ];
 
         return $data;
     }
 
-    /**
-     * @param array
-     * @return \Omnipay\NMI\Message\ThreeStepRedirectResponse
-     */
-    public function sendData($data)
+    public function sendData(mixed $data): AbstractResponse
     {
-        $document = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><'.$this->type.'/>');
+        $document = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><' . $this->type . '/>');
         $this->arrayToXml($document, $data);
 
         $httpResponse = $this->httpClient->request(
             'POST',
             $this->getEndpoint(),
-            array(
-                'Content-Type' => 'text/xml',
-                'User-Agent'   => 'Omnipay',
-            ),
-            $document->asXML()
+            ['Content-Type' => 'text/xml', 'User-Agent' => 'Omnipay'],
+            $document->asXML() ?: null,
         );
 
         $xml = static::xmlDecode($httpResponse);
@@ -285,57 +218,42 @@ abstract class ThreeStepRedirectAbstractRequest extends AbstractRequest
      *
      * Copied from Response->xml() in Guzzle3 (copyright @mtdowling)
      * @link https://github.com/guzzle/guzzle3/blob/v3.9.3/src/Guzzle/Http/Message/Response.php
-     *
-     * @param  string|ResponseInterface $response
-     * @return \SimpleXMLElement
      * @throws RuntimeException if the response body is not in XML format
      * @link http://websec.io/2012/08/27/Preventing-XXE-in-PHP.html
-     *
      */
-    public static function xmlDecode($response)
+    public static function xmlDecode(string|ResponseInterface $response): SimpleXMLElement
     {
-        if ($response instanceof \Psr\Http\Message\ResponseInterface) {
-            $body = $response->getBody()->__toString();
-        } else {
-            $body = (string) $response;
-        }
+        $body = $response instanceof ResponseInterface ? $response->getBody()->__toString() : $response;
 
+        $xml = null;
         $errorMessage = null;
         $internalErrors = libxml_use_internal_errors(true);
-        $disableEntities = libxml_disable_entity_loader(true);
         libxml_clear_errors();
 
         try {
-            $xml = new \SimpleXMLElement((string) $body ?: '<root />', LIBXML_NONET);
-        } catch (\Exception $e) {
+            $xml = new SimpleXMLElement((string) $body ?: '<root />', LIBXML_NONET);
+        } catch (Exception $e) {
             $errorMessage = $e->getMessage();
         }
 
         libxml_clear_errors();
         libxml_use_internal_errors($internalErrors);
-        libxml_disable_entity_loader($disableEntities);
 
         if ($errorMessage !== null) {
-            throw new \InvalidArgumentException('SimpleXML error: ' . $errorMessage);
+            throw new InvalidArgumentException('SimpleXML error: ' . $errorMessage);
         }
 
         return $xml;
     }
 
-    /**
-     * @param \SimpleXMLElement
-     * @param array
-     * @return void
-     */
-    private function arrayToXml(SimpleXMLElement $parent, array $data)
+    private function arrayToXml(SimpleXMLElement $parent, array $data): void
     {
         foreach ($data as $name => $value) {
             if (is_array($value)) {
                 $child = $parent->addChild($name);
                 $this->arrayToXml($child, $value);
-            }
-            else {
-                $parent->addChild($name, htmlspecialchars($value));
+            } else {
+                $parent->addChild($name, htmlspecialchars((string) $value));
             }
         }
     }

@@ -1,7 +1,20 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Omnipay\NMI;
 
 use Omnipay\Common\AbstractGateway;
+use Omnipay\Common\Message\AbstractRequest;
+use Omnipay\NMI\Message\DirectPostAuthRequest;
+use Omnipay\NMI\Message\DirectPostCaptureRequest;
+use Omnipay\NMI\Message\DirectPostCreateCardRequest;
+use Omnipay\NMI\Message\DirectPostCreditRequest;
+use Omnipay\NMI\Message\DirectPostDeleteCardRequest;
+use Omnipay\NMI\Message\DirectPostRefundRequest;
+use Omnipay\NMI\Message\DirectPostSaleRequest;
+use Omnipay\NMI\Message\DirectPostUpdateCardRequest;
+use Omnipay\NMI\Message\DirectPostVoidRequest;
 
 /**
  * NMI Direct Post Gateway
@@ -11,308 +24,192 @@ use Omnipay\Common\AbstractGateway;
  */
 class DirectPostGateway extends AbstractGateway
 {
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'NMI Direct Post';
     }
 
-    /**
-     * @return array
-     */
-    public function getDefaultParameters()
+    public function getDefaultParameters(): array
     {
-        return array();
+        return [];
     }
 
-    /**
-     * @return string
-     */
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->getParameter('username');
     }
 
-    /**
-     * @param  string $value
-     * @return $this
-     */
-    public function setUsername($value)
+    public function setUsername(string $value): self
     {
         return $this->setParameter('username', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->getParameter('password');
     }
 
-    /**
-     * @param  string $value
-     * @return $this
-     */
-    public function setPassword($value)
+    public function setPassword(string $value): self
     {
         return $this->setParameter('password', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getSecurityKey()
+    public function getSecurityKey(): string
     {
         return $this->getParameter('security_key');
     }
 
-    /**
-     * @param  string $value
-     * @return $this
-     */
-    public function setSecurityKey($value)
+    public function setSecurityKey(string $value): self
     {
         return $this->setParameter('security_key', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getProcessorId()
+    public function getProcessorId(): string
     {
         return $this->getParameter('processor_id');
     }
 
-    /**
-     * @param  string $value
-     * @return $this
-     */
-    public function setProcessorId($value)
+    public function setProcessorId(string $value): self
     {
         return $this->setParameter('processor_id', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getAuthorizationCode()
+    public function getAuthorizationCode(): string
     {
         return $this->getParameter('authorization_code');
     }
 
-    /**
-     * @param  string $value
-     * @return $this
-     */
-    public function setAuthorizationCode($value)
+    public function setAuthorizationCode(string $value): self
     {
         return $this->setParameter('authorization_code', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getDescriptor()
+    public function getDescriptor(): string
     {
         return $this->getParameter('descriptor');
     }
 
-    /**
-     * @param  string $value
-     * @return $this
-     */
-    public function setDescriptor($value)
+    public function setDescriptor(string $value): self
     {
         return $this->setParameter('descriptor', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getDescriptorPhone()
+    public function getDescriptorPhone(): string
     {
         return $this->getParameter('descriptor_phone');
     }
 
-    /**
-     * @param  string $value
-     * @return $this
-     */
-    public function setDescriptorPhone($value)
+    public function setDescriptorPhone(string $value): self
     {
         return $this->setParameter('descriptor_phone', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getDescriptorAddress()
+    public function getDescriptorAddress(): string
     {
         return $this->getParameter('descriptor_address');
     }
 
-    /**
-     * @param  string $value
-     * @return $this
-     */
-    public function setDescriptorAddress($value)
+    public function setDescriptorAddress(string $value): self
     {
         return $this->setParameter('descriptor_address', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getDescriptorCity()
+    public function getDescriptorCity(): string
     {
         return $this->getParameter('descriptor_city');
     }
 
-    /**
-     * @param  string $value
-     * @return $this
-     */
-    public function setDescriptorCity($value)
+    public function setDescriptorCity(string $value): self
     {
         return $this->setParameter('descriptor_city', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getDescriptorState()
+    public function getDescriptorState(): string
     {
         return $this->getParameter('descriptor_state');
     }
 
-    /**
-     * @param  string $value
-     * @return $this
-     */
-    public function setDescriptorState($value)
+    public function setDescriptorState(string $value): self
     {
         return $this->setParameter('descriptor_state', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getDescriptorPostal()
+    public function getDescriptorPostal(): string
     {
         return $this->getParameter('descriptor_postal');
     }
 
-    /**
-     * @param  string $value
-     * @return $this
-     */
-    public function setDescriptorPostal($value)
+    public function setDescriptorPostal(string $value): self
     {
         return $this->setParameter('descriptor_postal', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getDescriptorCountry()
+    public function getDescriptorCountry(): string
     {
         return $this->getParameter('descriptor_country');
     }
 
-    /**
-     * @param  string $value
-     * @return $this
-     */
-    public function setDescriptorCountry($value)
+    public function setDescriptorCountry(string $value): self
     {
         return $this->setParameter('descriptor_country', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getDescriptorMcc()
+    public function getDescriptorMcc(): string
     {
         return $this->getParameter('descriptor_mcc');
     }
 
-    /**
-     * @param  string $value
-     * @return $this
-     */
-    public function setDescriptorMcc($value)
+    public function setDescriptorMcc(string $value): self
     {
         return $this->setParameter('descriptor_mcc', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getDescriptorMerchantId()
+    public function getDescriptorMerchantId(): string
     {
         return $this->getParameter('descriptor_merchant_id');
     }
 
-    /**
-     * @param  string $value
-     * @return $this
-     */
-    public function setDescriptorMerchantId($value)
+    public function setDescriptorMerchantId(string $value): self
     {
         return $this->setParameter('descriptor_merchant_id', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getDescriptorUrl()
+    public function getDescriptorUrl(): string
     {
         return $this->getParameter('descriptor_url');
     }
 
-    public function setDescriptorUrl($value)
+    public function setDescriptorUrl(string $value): self
     {
         return $this->setParameter('descriptor_url', $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getEndpoint()
+    public function getEndpoint(): string
     {
         return $this->getParameter('endpoint');
     }
 
-    /**
-     * @param  string $value
-     * @return $this
-     */
-    public function setEndpoint($value)
+    public function setEndpoint(string $value): self
     {
         return $this->setParameter('endpoint', $value);
     }
 
-    public function purchase(array $parameters = array())
+    public function purchase(array $options = []): AbstractRequest
     {
-        return $this->sale($parameters);
+        return $this->sale($options);
     }
 
-    public function authorize(array $parameters = array())
+    public function authorize(array $options = []): AbstractRequest
     {
-        return $this->auth($parameters);
+        return $this->auth($options);
     }
 
     /**
      * Transaction sales are submitted and immediately flagged for settlement.
-     * @param  array  $parameters
-     * @return \Omnipay\NMI\Message\DirectPostSaleRequest
      */
-    public function sale(array $parameters = array())
+    public function sale(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\DirectPostSaleRequest', $parameters);
+        return $this->createRequest(DirectPostSaleRequest::class, $options);
     }
 
     /**
@@ -320,85 +217,63 @@ class DirectPostGateway extends AbstractGateway
      * for settlement. These transactions must be flagged for settlement using
      * the capture transaction type. Authorizations typically remain active for
      * three to seven business days.
-     * @param  array  $parameters
-     * @return \Omnipay\NMI\Message\DirectPostAuthRequest
      */
-    public function auth(array $parameters = array())
+    public function auth(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\DirectPostAuthRequest', $parameters);
+        return $this->createRequest(DirectPostAuthRequest::class, $options);
     }
 
     /**
      * Transaction captures flag existing authorizations for settlement.
      * Only authorizations can be captured. Captures can be submitted for an
      * amount equal to or less than the original authorization.
-     * @param  array  $parameters
-     * @return \Omnipay\NMI\Message\DirectPostCaptureRequest
      */
-    public function capture(array $parameters = array())
+    public function capture(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\DirectPostCaptureRequest', $parameters);
+        return $this->createRequest(DirectPostCaptureRequest::class, $options);
     }
 
     /**
      * Transaction voids will cancel an existing sale or captured authorization.
      * In addition, non-captured authorizations can be voided to prevent any
      * future capture. Voids can only occur if the transaction has not been settled.
-     * @param  array  $parameters
-     * @return \Omnipay\NMI\Message\DirectPostVoidRequest
      */
-    public function void(array $parameters = array())
+    public function void(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\DirectPostVoidRequest', $parameters);
+        return $this->createRequest(DirectPostVoidRequest::class, $options);
     }
 
     /**
      * Transaction refunds will reverse a previously settled transaction. If the
      * transaction has not been settled, it must be voided instead of refunded.
-     * @param  array  $parameters
-     * @return \Omnipay\NMI\Message\DirectPostRefundRequest
      */
-    public function refund(array $parameters = array())
+    public function refund(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\DirectPostRefundRequest', $parameters);
+        return $this->createRequest(DirectPostRefundRequest::class, $options);
     }
 
     /**
      * Transaction credits apply an amount to the cardholder's card that was not
      * originally processed through the Gateway. In most situations credits are
      * disabled as transaction refunds should be used instead.
-     * @param  array  $parameters
-     * @return \Omnipay\NMI\Message\DirectPostCreditRequest
      */
-    public function credit(array $parameters = array())
+    public function credit(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\DirectPostCreditRequest', $parameters);
+        return $this->createRequest(DirectPostCreditRequest::class, $options);
     }
 
-    /**
-     * @param array $parameters
-     * @return \Omnipay\NMI\Message\DirectPostCreateCardRequest
-     */
-    public function createCard(array $parameters = array())
+    public function createCard(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\DirectPostCreateCardRequest', $parameters);
+        return $this->createRequest(DirectPostCreateCardRequest::class, $options);
     }
 
-    /**
-     * @param array $parameters
-     * @return \Omnipay\NMI\Message\DirectPostUpdateCardRequest
-     */
-    public function updateCard(array $parameters = array())
+    public function updateCard(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\DirectPostUpdateCardRequest', $parameters);
+        return $this->createRequest(DirectPostUpdateCardRequest::class, $options);
     }
 
-    /**
-     * @param array $parameters
-     * @return \Omnipay\NMI\Message\DirectPostDeleteCardRequest
-     */
-    public function deleteCard(array $parameters = array())
+    public function deleteCard(array $options = []): AbstractRequest
     {
-        return $this->createRequest('\Omnipay\NMI\Message\DirectPostDeleteCardRequest', $parameters);
+        return $this->createRequest(DirectPostDeleteCardRequest::class, $options);
     }
 }
